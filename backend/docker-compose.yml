@@ -1,0 +1,138 @@
+# ═══════════════════════════════════════════════════════════════════
+#  Mnemosyne — docker-compose.yml
+#
+#  Orchestrates all services needed for local development:
+#    api       — FastAPI backend
+#    postgres  — Primary relational database
+#    redis     — Cache / session store / task queue broker
+#    qdrant    — Vector database for semantic search
+#
+#  Usage:
+#    docker compose up -d          # start all services
+#    docker compose up api         # start only the API (assumes DB/Redis/Qdrant are running)
+#    docker compose logs -f api    # tail API logs
+#    docker compose down -v        # tear down and remove volumes
+# ═══════════════════════════════════════════════════════════════════
+
+services:
+
+  # ────────────────────────────────────────────
+  # FastAPI Backend
+  # ────────────────────────────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    container_name: mnemosyne_api
+    restart: unless-stopped
+    ports:
+      - "${PORT:-8000}:8000"
+    env_file:
+      - .env
+    environment:
+      # Override DB/Redis/Qdrant URLs to use service names defined below.
+      DATABASE_URL: "postgresql+asyncpg://postgres:${POSTGRES_PASSWORD:-password}@postgres:5432/${POSTGRES_DB:-mnemosyne}"
+      REDIS_URL: "redis://redis:6379/0"
+      QDRANT_URL: "${QDRANT_URL:-http://qdrant:6333}"
+    volumes:
+      # Mount source code for live reload during development.
+      # Remove this volume for production deployments.
+      - .:/backend
+      - /backend/__pycache__       # exclude pycache from the bind mount
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+    networks:
+      - mnemosyne_net
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health/live')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  # ────────────────────────────────────────────
+  # PostgreSQL
+  # ────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: mnemosyne_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: "${POSTGRES_USER:-postgres}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-password}"
+      POSTGRES_DB: "${POSTGRES_DB:-mnemosyne}"
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - mnemosyne_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-mnemosyne}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ────────────────────────────────────────────
+  # Redis
+  # ────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: mnemosyne_redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes   # enable persistence
+    networks:
+      - mnemosyne_net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ────────────────────────────────────────────
+  # Qdrant  (vector database)
+  # ────────────────────────────────────────────
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: mnemosyne_qdrant
+    restart: unless-stopped
+    ports:
+      - "${QDRANT_PORT:-6333}:6333"
+      - "6334:6334"    # gRPC port
+    volumes:
+      - qdrant_data:/qdrant/storage
+    networks:
+      - mnemosyne_net
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/localhost/6333'"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+
+# ─────────────────────────────────────────────
+# Named volumes  (persistent across restarts)
+# ─────────────────────────────────────────────
+volumes:
+  postgres_data:
+  redis_data:
+  qdrant_data:
+
+# ─────────────────────────────────────────────
+# Network
+# ─────────────────────────────────────────────
+networks:
+  mnemosyne_net:
+    driver: bridge

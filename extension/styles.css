@@ -1,0 +1,281 @@
+/* ─────────────────────────────────────────────────────────────────
+   Mnemosyne Extension — Popup Styles
+   Design: dark glassmorphism with electric-blue accent
+   ───────────────────────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:          #111110;            /* Obsidian Black */
+  --surface:     #1C1F1A;            /* Charcoal Patina */
+  --surface-2:   #272B24;            /* Charcoal Card Highlight */
+  --border:      #343B31;            /* Aged Charcoal Border */
+  --accent:      #3F8F84;            /* Verdigris Patina Green */
+  --accent-glow: rgba(63, 143, 132, 0.2);
+  --accent-gradient: linear-gradient(135deg, #3F8F84 0%, #B58A3A 100%);
+  --gold-accent: #B58A3A;            /* Aged Brass Accent */
+  --text:        #E9E4D7;            /* Bone White */
+  --text-muted:  #8E968C;            /* Muted Patina Grey */
+  --error:       #8E3C3C;            /* Oxide Red */
+  --success:     #5CA390;            /* Verdigris Success */
+  --warning:     #B58A3A;            /* Aged Brass Warning */
+  --radius:      8px;
+  --font:        'Inter', -apple-system, sans-serif;
+}
+
+body {
+  width: 360px;
+  min-height: 200px;
+  max-height: 600px;
+  background: rgba(17, 18, 21, 0.96);
+  backdrop-filter: blur(10px);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 13px;
+  overflow: hidden auto;
+}
+
+/* ─── Header ─────────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: rgba(23, 25, 30, 0.7);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: .3px;
+}
+.logo-icon { font-size: 18px; }
+
+/* ─── Views ──────────────────────────────────────────────────── */
+.view { padding: 16px; }
+.view-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+
+/* ─── Form fields ─────────────────────────────────────────────── */
+.field {
+  margin-bottom: 12px;
+}
+.field label {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="url"],
+.select,
+textarea {
+  width: 100%;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  padding: 8px 12px;
+  font-family: var(--font);
+  font-size: 13px;
+  outline: none;
+  transition: border-color .15s;
+}
+input:focus, .select:focus, textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+/* ─── Buttons ─────────────────────────────────────────────────── */
+.btn-primary {
+  width: 100%;
+  padding: 10px 16px;
+  background: var(--accent-gradient);
+  color: #111110;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top: 4px;
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, #4EAFA1 0%, #CD9F4A 100%);
+}
+.btn-primary:active {
+  transform: translateY(1px);
+}
+.btn-primary:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  padding: 8px 14px;
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-secondary:hover {
+  background: var(--surface);
+  border-color: var(--text-muted);
+}
+.btn-sm { padding: 5px 10px; font-size: 11px; }
+
+.btn-icon {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition: color .15s, background .15s;
+}
+.btn-icon:hover { color: var(--text); background: var(--surface-2); }
+
+/* ─── Sections ────────────────────────────────────────────────── */
+.section {
+  margin-bottom: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+/* ─── Context area ────────────────────────────────────────────── */
+.context-area {
+  min-height: 120px;
+  max-height: 200px;
+  font-size: 11px;
+  line-height: 1.5;
+  resize: vertical;
+  margin-bottom: 10px;
+}
+
+/* ─── Action row ─────────────────────────────────────────────── */
+.action-row {
+  display: flex;
+  gap: 8px;
+}
+.action-row .btn-primary { margin-top: 0; flex: 1; }
+
+/* ─── Status banner ──────────────────────────────────────────── */
+.status-banner {
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  font-size: 12px;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+.status-banner.success { background: rgba(52,211,153,.15); border: 1px solid rgba(52,211,153,.3); color: var(--success); }
+.status-banner.error   { background: rgba(248,113,113,.12); border: 1px solid rgba(248,113,113,.3); color: var(--error); }
+.status-banner.info    { background: rgba(59,130,246,.12); border: 1px solid rgba(59,130,246,.3); color: var(--accent); }
+
+/* ─── Capture info ───────────────────────────────────────────── */
+.capture-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ─── Error message ──────────────────────────────────────────── */
+.error-msg {
+  color: var(--error);
+  font-size: 12px;
+  padding: 6px 10px;
+  background: rgba(248,113,113,.1);
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+/* ─── API config ─────────────────────────────────────────────── */
+.api-config {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.api-config label {
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.api-config input { flex: 1; }
+
+/* ─── Select ─────────────────────────────────────────────────── */
+.select { appearance: none; cursor: pointer; }
+
+/* ─── Header buttons group ───────────────────────────────────── */
+.header-btns {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+
+/* ─── Create project form ────────────────────────────────────── */
+.create-project-form {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.input-sm {
+  width: 100%;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  padding: 7px 10px;
+  font-family: var(--font);
+  font-size: 12px;
+  outline: none;
+  transition: border-color .15s;
+}
+.input-sm:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-glow);
+}
+.input-sm::placeholder {
+  color: var(--text-muted);
+}

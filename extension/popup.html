@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mnemosyne Memory</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app">
+
+    <!-- ── Header ── -->
+    <header class="header">
+      <div class="header-logo">
+        <span class="logo-icon">🧠</span>
+        <span class="logo-text">Mnemosyne</span>
+      </div>
+      <div class="header-actions">
+        <button id="btn-logout" class="btn-icon" title="Logout" style="display:none">⏏</button>
+      </div>
+    </header>
+
+    <!-- ── Login View ── -->
+    <section id="view-login" class="view">
+      <h2 id="auth-title" class="view-title">Sign in to Mnemosyne</h2>
+      
+      <form id="form-login" autocomplete="on">
+        <div class="field">
+          <label for="input-email">Email</label>
+          <input id="input-email" type="email" placeholder="you@example.com" required autocomplete="email" />
+        </div>
+        <div class="field">
+          <label for="input-password">Password</label>
+          <input id="input-password" type="password" placeholder="••••••••" required autocomplete="current-password" />
+        </div>
+        <div id="login-error" class="error-msg" style="display:none"></div>
+        <button id="btn-login" type="submit" class="btn-primary">Sign In</button>
+        <div class="toggle-view" style="text-align: center; margin-top: 12px; font-size: 13px;">
+          <a href="#" id="link-to-signup" style="color: var(--color-primary); text-decoration: none;">Don't have an account? Sign up</a>
+        </div>
+      </form>
+
+      <form id="form-signup" autocomplete="on" style="display:none">
+        <div class="field">
+          <label for="input-signup-name">Full Name (Optional)</label>
+          <input id="input-signup-name" type="text" placeholder="John Doe" autocomplete="name" />
+        </div>
+        <div class="field">
+          <label for="input-signup-email">Email</label>
+          <input id="input-signup-email" type="email" placeholder="you@example.com" required autocomplete="email" />
+        </div>
+        <div class="field">
+          <label for="input-signup-password">Password</label>
+          <input id="input-signup-password" type="password" placeholder="••••••••" required autocomplete="new-password" minlength="8" />
+        </div>
+        <div id="signup-error" class="error-msg" style="display:none"></div>
+        <button id="btn-signup" type="submit" class="btn-primary">Sign Up</button>
+        <div class="toggle-view" style="text-align: center; margin-top: 12px; font-size: 13px;">
+          <a href="#" id="link-to-login" style="color: var(--color-primary); text-decoration: none;">Already have an account? Sign in</a>
+        </div>
+      </form>
+    </section>
+
+    <!-- ── Main View ── -->
+    <section id="view-main" class="view" style="display:none">
+
+      <!-- Project selector -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-label">Project</span>
+          <div class="header-btns">
+            <button id="btn-new-project" class="btn-icon" title="Create new project">＋</button>
+            <button id="btn-refresh-projects" class="btn-icon" title="Refresh projects">↺</button>
+          </div>
+        </div>
+        <select id="select-project" class="select">
+          <option value="">— Select a project —</option>
+        </select>
+
+        <div class="action-row" style="margin-top: 12px;">
+          <button id="btn-inject" class="btn-primary">⚡ Inject Context</button>
+        </div>
+
+        <!-- Inline create project form (hidden by default) -->
+        <div id="create-project-form" class="create-project-form" style="display:none">
+          <input id="input-project-name" type="text" placeholder="Project name" class="input-sm" required />
+          <input id="input-project-id" type="text" placeholder="project-id (slug)" class="input-sm" />
+          <div class="action-row">
+            <button id="btn-create-project" class="btn-primary btn-sm">Create</button>
+            <button id="btn-cancel-create" class="btn-secondary btn-sm">Cancel</button>
+          </div>
+          <div id="create-project-error" class="error-msg" style="display:none"></div>
+        </div>
+      </div>
+
+      <!-- Status -->
+      <div id="sync-status" class="status-banner" style="display:none"></div>
+
+      <!-- Context preview -->
+      <div class="section" id="section-context" style="display:none">
+        <div class="section-header">
+          <span class="section-label">Project Memory Context</span>
+          <button id="btn-refresh-context" class="btn-icon" title="Refresh context">↺</button>
+        </div>
+        <textarea id="context-preview" class="context-area" readonly placeholder="Context will appear here..."></textarea>
+        <div class="action-row">
+          <button id="btn-copy" class="btn-secondary">📋 Copy</button>
+        </div>
+      </div>
+
+      <!-- Capture status -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-label">Capture Status</span>
+        </div>
+        <div id="capture-info" class="capture-info">
+          <span id="capture-platform">Platform: detecting…</span>
+          <span id="capture-count">Messages captured: 0</span>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

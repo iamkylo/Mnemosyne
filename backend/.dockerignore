@@ -1,0 +1,40 @@
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.egg-info
+.eggs
+
+# Testing
+.pytest_cache
+.coverage
+htmlcov
+.tox
+
+# Environment
+.env
+.venv
+venv
+env
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Git
+.git
+.gitignore
+
+# Docker
+docker-compose.yml
+docker-compose.*.yml
+Dockerfile
+
+# Logs
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
